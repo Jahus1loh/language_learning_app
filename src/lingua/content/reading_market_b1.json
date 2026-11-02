@@ -1,0 +1,9 @@
+{
+  "type": "reading", "id": "market-b1", "title": "Saturday at the market", "level": "B1",
+  "text": "Every Saturday, Anna goes to the market near her flat. She likes to arrive early, because the vegetables are fresher and there are fewer people.\n\nLast week she wanted to make soup, so she bought carrots, onions and a large pumpkin. The seller, Mr Nowak, gave her some parsley for free. 'You are my best customer,' he said with a smile.\n\nAfter shopping, Anna met a friend for coffee. They talked for an hour and then walked home together.",
+  "questions": [
+    {"id": "q1", "prompt": "Why does Anna arrive early?", "options": ["The market closes soon", "The vegetables are fresher", "She meets a friend", "It is cheaper"], "answer": 1},
+    {"id": "q2", "prompt": "What did Anna want to make?", "options": ["A salad", "A cake", "Soup", "Pizza"], "answer": 2},
+    {"id": "q3", "prompt": "What did Mr Nowak give her for free?", "options": ["Parsley", "Carrots", "A pumpkin", "Coffee"], "answer": 0}
+  ]
+}

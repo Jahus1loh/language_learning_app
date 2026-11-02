@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>What do you want to practise?</h1>
+{% for m in modules %}
+<a class="lesson" href="{{ url_for(m.bp.name + '.index') }}">
+  <span><strong>{{ m.TITLE }}</strong><br>{{ m.BLURB }}</span>
+  <span>{{ counts[m.TYPE] }} lessons</span>
+</a>
+{% endfor %}
+{% if errors %}
+<div class="notice"><strong>Some content files were skipped:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% endif %}
+{% endblock %}

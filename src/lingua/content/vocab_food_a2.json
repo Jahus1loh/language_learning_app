@@ -1,0 +1,11 @@
+{
+  "type": "vocabulary", "id": "food-a2", "title": "Food and drink", "level": "A2",
+  "cards": [
+    {"id": "f1", "front": "bread", "back": "chleb", "example": "I buy fresh bread every morning."},
+    {"id": "f2", "front": "cheese", "back": "ser", "example": "Would you like some cheese?"},
+    {"id": "f3", "front": "breakfast", "back": "śniadanie", "example": "We have breakfast at eight."},
+    {"id": "f4", "front": "hungry", "back": "głodny", "example": "I am very hungry after school."},
+    {"id": "f5", "front": "menu", "back": "karta dań", "example": "Can I see the menu, please?"},
+    {"id": "f6", "front": "bill", "back": "rachunek", "example": "Could we have the bill, please?"}
+  ]
+}

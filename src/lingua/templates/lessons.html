@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+{% for l in lessons %}
+<a class="lesson" href="{{ url_for(endpoint, lesson_id=l.id) }}">
+  <strong>{{ l.title }}</strong><span>{{ l.level }}</span>
+</a>
+{% else %}
+<p>No lessons yet. Add a JSON file to the <code>content/</code> folder.</p>
+{% endfor %}
+{% endblock %}

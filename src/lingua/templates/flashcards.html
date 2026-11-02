@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ deck.title }}{% endblock %}
+{% block content %}
+<h1>{{ deck.title }}</h1>
+<script id="deck" type="application/json">{{ deck|tojson }}</script>
+<section id="study">
+  <p id="progress" aria-live="polite"></p>
+  <button id="card" class="card" type="button" aria-label="Flip card">
+    <span id="word"></span><small id="example"></small>
+  </button>
+  <p class="hint" id="hint">Tap the card to see the answer.</p>
+  <div id="actions" class="row" hidden>
+    <button id="again" type="button">Again</button>
+    <button id="got" type="button" class="primary">Got it</button>
+  </div>
+</section>
+<section id="done" hidden>
+  <h2>Deck finished</h2>
+  <p id="summary"></p>
+  <button id="restart" type="button" class="primary">Study again</button>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='flashcards.js') }}"></script>{% endblock %}

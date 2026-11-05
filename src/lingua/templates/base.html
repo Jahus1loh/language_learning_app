@@ -1,17 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Lingua{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <header>
-    <a class="brand" href="{{ url_for('home') }}">Lingua</a>
-    <nav>{% for m in modules %}<a href="{{ url_for(m.bp.name + '.index') }}">{{ m.TITLE }}</a>{% endfor %}</nav>
-  </header>
-  <main>{% block content %}{% endblock %}</main>
-  {% block scripts %}{% endblock %}
-</body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Lingua{% endblock %}</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    </head>
+    <body>
+        {% if 'loggedin' in session %}
+        <header class="navbar">
+            <div class="navbar-inner">
+                <a href="{{ url_for('main.home') }}" class="navbar-title">Lingua</a>
+                <nav class="navbar-links" aria-label="Main">
+                    <a href="{{ url_for('main.home') }}"{% if request.endpoint == 'main.home' %} aria-current="page"{% endif %}>
+                        <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#home"></use></svg>
+                        Home
+                    </a>
+                    {% for m in modules %}
+                    <a href="{{ url_for(m.bp.name + '.index') }}"{% if request.blueprint == m.bp.name %} aria-current="page"{% endif %}>
+                        {{ m.TITLE }}
+                    </a>
+                    {% endfor %}
+                    <a href="{{ url_for('main.profile') }}"{% if request.endpoint == 'main.profile' %} aria-current="page"{% endif %}>
+                        <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#user-circle"></use></svg>
+                        Profile
+                    </a>
+                    <form action="{{ url_for('auth.logout') }}" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="navbar-logout">
+                            <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#log-out"></use></svg>
+                            Log out
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </header>
+        {% endif %}
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        {% block scripts %}{% endblock %}
+    </body>
 </html>

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="auth">
+    <span class="auth-icon"><svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#user-plus"></use></svg></span>
+    <h1>Create an account</h1>
+    <p class="auth-intro">Choose a username, then add your email and a password.</p>
+    {% if msg %}
+    <p class="msg msg-error" role="alert">
+        <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#alert-circle"></use></svg>
+        {{ msg }}
+    </p>
+    {% endif %}
+    <form action="{{ url_for('auth.register') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field">
+            <label for="username">Username</label>
+            <div class="input-wrap">
+                <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#user"></use></svg>
+                <input type="text" name="username" id="username"
+                    placeholder="Choose a username"
+                    value="{{ request.form.get('username', '') }}"
+                    autocomplete="username" autocapitalize="none"
+                    spellcheck="false" minlength="3" maxlength="20"
+                    pattern="[A-Za-z0-9]+" aria-describedby="username-hint"
+                    required>
+            </div>
+            <p class="field-hint" id="username-hint">3 to 20 letters and numbers.</p>
+        </div>
+        <div class="field">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+                <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#mail"></use></svg>
+                <input type="email" name="email" id="email"
+                    placeholder="you@example.com"
+                    value="{{ request.form.get('email', '') }}"
+                    autocomplete="email" maxlength="100" required>
+            </div>
+        </div>
+        <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+                <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#lock"></use></svg>
+                <input type="password" name="password" id="password"
+                    class="password-input" placeholder="Create a password"
+                    autocomplete="new-password" minlength="8" maxlength="128"
+                    aria-describedby="password-hint" required>
+                <button type="button" class="password-toggle"
+                    aria-controls="password" aria-label="Show password"
+                    aria-pressed="false" hidden>
+                    <svg class="icon icon-show" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#eye"></use></svg>
+                    <svg class="icon icon-hide" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#eye-off"></use></svg>
+                </button>
+            </div>
+            <p class="field-hint" id="password-hint">At least 8 characters.</p>
+        </div>
+        <button type="submit" class="btn">Create account</button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+</div>
+{% endblock %}

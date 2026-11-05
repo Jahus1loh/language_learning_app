@@ -1,4 +1,5 @@
 import pytest
+
 from src.lingua.app import create_app
 
 

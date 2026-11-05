@@ -1,35 +1,47 @@
-from pathlib import Path
+from flask import Flask
 
-from flask import Flask, render_template
-
-import src.lingua.events as events
-import src.lingua.modules as modules
+from src.lingua import events, modules
+from src.lingua.config.config import Config
 from src.lingua.content import ContentStore
+from src.lingua.database.db import init_db, test_db
+from src.lingua.extensions import init_extensions
+from src.lingua.routes import auth, errors, main
+from src.lingua.security import init_security
 
-ROOT = Path(__file__).parent
 
-
-def create_app(content_dir=ROOT / "content"):
+def create_app(content_dir=None):
     app = Flask(__name__)
-    app.config["DATA_DIR"] = ROOT / "data"
-    store = ContentStore(content_dir)
+    app.config.from_object(Config)
+
+    validate_config(app)
+
+    init_extensions(app)
+    init_db(app)
+    init_security(app)
+
+    store = ContentStore(content_dir or Config.ROOT / "content")
+
     app.extensions["store"] = store
 
-    app.register_blueprint(events.bp)
-    for m in modules.REGISTRY:  # every learning module plugs in here
-        app.register_blueprint(m.bp)
-
-    @app.context_processor
-    def inject_nav():
-        return {"modules": modules.REGISTRY}
-
-    @app.get("/")
-    def home():
-        counts = {m.TYPE: len(store.all(m.TYPE)) for m in modules.REGISTRY}
-        return render_template("home.html", counts=counts, errors=store.errors)
+    register_blueprints(app)
 
     return app
 
 
-if __name__ == "__main__":
-    create_app().run(debug=True)
+def validate_config(app):
+    secret_key = app.config["SECRET_KEY"]
+
+    if len(secret_key) < 32 or secret_key.startswith("replace-this"):
+        raise SystemExit(
+            "Set SECRET_KEY in the .env file to a long random string first!"
+        )
+
+
+def register_blueprints(app):
+    app.register_blueprint(main.bp)
+    app.register_blueprint(events.bp)
+    app.register_blueprint(auth.bp)
+    errors.register_error_handlers(app)
+
+    for module in modules.REGISTRY:
+        app.register_blueprint(module.bp)

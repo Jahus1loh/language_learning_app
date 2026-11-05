@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, render_template, request
 
-import src.lingua.events as events
+from src.lingua import events
 from src.lingua.content import store
 
 TITLE, TYPE = "Reading", "reading"

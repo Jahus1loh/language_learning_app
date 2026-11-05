@@ -1,7 +1,8 @@
 from flask import Blueprint, abort, render_template, request
 
-import src.lingua.events as events
+from src.lingua import events
 from src.lingua.content import store
+from src.lingua.validators import login_required
 
 TITLE, TYPE = "Reading", "reading"
 BLURB = "Read a short text and answer questions."
@@ -9,12 +10,14 @@ bp = Blueprint("reading", __name__, url_prefix="/reading")
 
 
 @bp.get("/")
+@login_required
 def index():
     return render_template("lessons.html", title=TITLE, endpoint="reading.lesson",
                            lessons=store().all(TYPE))
 
 
 @bp.route("/<lesson_id>", methods=["GET", "POST"])
+@login_required
 def lesson(lesson_id):
     text = store().get(TYPE, lesson_id) or abort(404)
     result = None

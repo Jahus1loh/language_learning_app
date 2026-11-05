@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<div class="auth">
+    <span class="auth-icon"><svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#log-in"></use></svg></span>
+    <h1>Log in</h1>
+    <p class="auth-intro">Welcome back, {{ username }}. Enter your details to continue.</p>
+    {% for message in get_flashed_messages() %}
+    <p class="msg msg-success" role="status">
+        <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#check-circle"></use></svg>
+        {{ message }}
+    </p>
+    {% endfor %}
+    {% if msg %}
+    <p class="msg msg-error" role="alert">
+        <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#alert-circle"></use></svg>
+        {{ msg }}
+    </p>
+    {% endif %}
+    <form action="{{ url_for('auth.login') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field">
+            <label for="username">Username</label>
+            <div class="input-wrap">
+                <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#user"></use></svg>
+                <input type="text" name="username" id="username"
+                    placeholder="Enter your username"
+                    value="{{ request.form.get('username', '') }}"
+                    autocomplete="username" autocapitalize="none"
+                    spellcheck="false" required>
+            </div>
+        </div>
+        <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+                <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#lock"></use></svg>
+                <input type="password" name="password" id="password"
+                    class="password-input" placeholder="Enter your password"
+                    autocomplete="current-password" required>
+                <button type="button" class="password-toggle"
+                    aria-controls="password" aria-label="Show password"
+                    aria-pressed="false" hidden>
+                    <svg class="icon icon-show" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#eye"></use></svg>
+                    <svg class="icon icon-hide" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#eye-off"></use></svg>
+                </button>
+            </div>
+        </div>
+        <button type="submit" class="btn">Log in</button>
+    </form>
+    <p class="auth-switch">Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+</div>
+{% endblock %}

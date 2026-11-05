@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="page">
+    <h1>Profile</h1>
+    <div class="card profile">
+        <span class="avatar" aria-hidden="true">
+            {{ account['username'][0]|upper }}
+        </span>
+        <dl class="details">
+            <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#user"></use></svg>Username</dt>
+                <dd>{{ account['username'] }}</dd>
+            </div>
+            <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#mail"></use></svg>Email</dt>
+                <dd>{{ account['email'] }}</dd>
+            </div>
+            <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#calendar"></use></svg>Registered</dt>
+                <dd>
+                    {{ account['registered'].strftime('%B') }}
+                    {{ account['registered'].day }},
+                    {{ account['registered'].year }}
+                </dd>
+            </div>
+        </dl>
+    </div>
+</div>
+{% endblock %}

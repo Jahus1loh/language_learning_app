@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Log in{% endblock %}
 
@@ -6,7 +6,7 @@
 <div class="auth">
     <span class="auth-icon"><svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#log-in"></use></svg></span>
     <h1>Log in</h1>
-    <p class="auth-intro">Welcome back. Enter your details to continue.</p>
+    <p class="auth-intro">Welcome back, {{ username }}. Enter your details to continue.</p>
     {% for message in get_flashed_messages() %}
     <p class="msg msg-success" role="status">
         <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#check-circle"></use></svg>
@@ -19,7 +19,7 @@
         {{ msg }}
     </p>
     {% endif %}
-    <form action="{{ url_for('login') }}" method="post">
+    <form action="{{ url_for('auth.login') }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="field">
             <label for="username">Username</label>

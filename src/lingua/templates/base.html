@@ -23,7 +23,7 @@
                         {{ m.TITLE }}
                     </a>
                     {% endfor %}
-                    <a href="{{ url_for('main.profile') }}"{% if request.endpoint == 'main.profile' %} aria-current="page"{% endif %}>
+                    <a href="{{ url_for('auth.profile') }}"{% if request.endpoint == 'auth.profile' %} aria-current="page"{% endif %}>
                         <svg class="icon" aria-hidden="true"><use href="{{ url_for('static', filename='icons.svg') }}#user-circle"></use></svg>
                         Profile
                     </a>

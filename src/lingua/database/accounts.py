@@ -6,6 +6,7 @@ from src.lingua.database.read_queries import (
     read_account_exists,
     read_insert_user,
     read_select_user,
+    read_select_user_by_id,
 )
 
 from .db import get_db
@@ -45,4 +46,13 @@ def get_account(username):
     """Return the account as a dict, or None if no account matches."""
     with get_db().cursor(prepared=True, dictionary=True) as cursor:
         cursor.execute(read_select_user(), (username,))
+        return cursor.fetchone()
+
+
+def get_account_by_id(account_id):
+    with get_db().cursor(prepared=True, dictionary=True) as cursor:
+        cursor.execute(
+            read_select_user_by_id(),
+            (account_id,),
+        )
         return cursor.fetchone()

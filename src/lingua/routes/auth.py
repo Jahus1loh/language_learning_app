@@ -1,14 +1,16 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash
 
+from src.lingua.validators import login_required, validate_registration
+
 from ..database.accounts import (
     AccountExistsError,
     account_exists,
     create_account,
     get_account,
+    get_account_by_id,
 )
 from ..extensions import limiter
-from ..validators import validate_registration
 
 bp = Blueprint("auth", __name__)
 
@@ -58,7 +60,7 @@ def _login_post():
 @limiter.limit("5 per minute", methods=["POST"])
 def login():
     if "loggedin" in session:
-        return redirect(url_for("main.home"))
+        return redirect(url_for("main.index"))
     if request.method == "POST":
         return _login_post()
     return _show_login()
@@ -121,3 +123,20 @@ def register():
     if request.method == "POST":
         return _register_post()
     return _show_form()
+
+
+@bp.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    flash("You have been logged out.")
+    return redirect(url_for("auth.login"))
+
+
+@bp.route("/profile")
+@login_required
+def profile():
+    account = get_account_by_id(session["id"])
+    if account is None:
+        session.clear()
+        return redirect(url_for("login"))
+    return render_template("profile.html", account=account)

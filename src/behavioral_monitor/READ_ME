@@ -1,0 +1,59 @@
+# Behavioral Monitor
+
+The behavioral monitor uses a webcam and MediaPipe Face Mesh to estimate eye
+and mouth measurements for one person. It displays the measurements and appends
+one summary record per minute to a local JSON Lines log.
+
+## Requirements
+
+The monitor has its own virtual environment in `venv`. The current environment
+uses Python 3.11.9 and these main package versions:
+
+- OpenCV (`opencv-contrib-python`): 4.11.0.86
+- MediaPipe: 0.10.21
+- NumPy: 1.26.4
+- pytest: 9.2.0
+
+If setting up a new environment, install the dependencies:
+
+```powershell
+python -m pip install opencv-contrib-python==4.11.0.86 mediapipe==0.10.21 numpy==1.26.4 pytest==9.2.0
+```
+
+## Run
+
+From this directory, with the environment activated:
+
+```powershell
+python main.py
+```
+
+The webcam window shows EAR, MAR, blink rate, PERCLOS, yawn statistics, and the
+current time. Press `q` while the window is focused to quit.
+
+## Measurements
+
+The implementation uses these initial thresholds in `FeatureExtractor`:
+
+- EAR eye-closure threshold: `0.21`
+- MAR yawn threshold: `0.6`
+- Minimum yawn duration for counting: `0.8` seconds
+- Blink and rolling metric windows: `60` seconds
+
+These are heuristic defaults, not clinically validated thresholds. Face
+position, lighting, occlusion (including a hand covering the mouth), and
+individual differences can affect the measurements. The app currently does not
+perform individual calibration.
+
+## Logs
+
+Minute summaries are appended to:
+
+```text
+data/behavior_metrics.jsonl
+```
+
+Each line is a separate JSON object with the window times, observed frame count,
+face-tracking coverage, mean measurements, and qualifying yawn count/duration.
+The file is cleared each time `main.py` starts. Camera frames and raw landmarks
+are not written to the log.
